@@ -1,6 +1,4 @@
-set (LOCAL_NAME iSS)
-
-add_executable(${LOCAL_NAME}
+add_executable(iSS
   main.cpp
   arsenal.cpp
   ParameterReader.cpp
@@ -14,7 +12,4 @@ add_executable(${LOCAL_NAME}
   readindata.cpp
   )
 
-# install compiled binary and its dependencies
-install (TARGETS ${LOCAL_NAME} DESTINATION ${LOCAL_NAME})
-install (FILES parameters.dat OSCAR_header.txt DESTINATION ${LOCAL_NAME})
-install (DIRECTORY EOS results tables DESTINATION ${LOCAL_NAME})
+install (TARGETS iSS DESTINATION ${CMAKE_HOME_DIRECTORY})
