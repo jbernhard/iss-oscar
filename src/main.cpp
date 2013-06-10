@@ -34,13 +34,9 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-   cout << endl
-        << "                  iSpectraSampler                " << endl
-        << endl
-        << "  Ver 2.0.0.0  ---- Zhi Qiu & Chun Shen, 04/2012 " << endl;
-   cout << endl << "**********************************************************" << endl;
-   display_logo(3); // Hail to the king~
-   cout << endl << "**********************************************************" << endl << endl;
+   cout << "iSS-OSCAR hypersurface sampler" << endl
+        << "written by Zhi Qiu & Chun Shen" << endl
+        << "modified by Jonah Bernhard" << endl << endl;
 
    // Chun's input reading process
    string path="results";
