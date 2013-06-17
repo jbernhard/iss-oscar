@@ -167,7 +167,7 @@ EmissionFunctionArray::EmissionFunctionArray(Table* chosen_particles_in, Table* 
   dN_dxt_filename = "results/dN_dxt_%d.dat";
 
   OSCAR_header_filename = "OSCAR_header.txt";
-  OSCAR_output_filename = "OSCAR.DAT";
+  OSCAR_output_filename = "results/OSCAR.dat";
 
   dN_dxtdy_4all = new double*[FO_length];
   for (long l=0; l<FO_length; l++) dN_dxtdy_4all[l] = new double[number_of_chosen_particles];
