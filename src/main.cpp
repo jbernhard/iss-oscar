@@ -45,8 +45,8 @@ int main(int argc, char** argv)
    int FO_length = 0;
    ostringstream decdatfile;
    cout << " -- Loading the decoupling data....";
-   decdatfile << path << "/decdat2.dat";
-   FO_length=get_filelength(decdatfile.str().c_str());
+   decdatfile << path << "/OSCAR2008H.dat";
+   FO_length=get_filelength(decdatfile.str());
    cout <<" cells number: " <<  FO_length << endl;
 
    //read the data arrays for the decoupling information

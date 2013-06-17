@@ -15,37 +15,80 @@ using namespace std;
 
 int get_filelength(string filepath)
 {
-   Table block_file(filepath);
-   return block_file.getNumberOfRows();
+  ifstream oscar(filepath.c_str());
+
+  string line;
+  int length = 0;
+
+  // skip the header
+  while ( line != "END_OF_HEADER" )
+    getline(oscar, line);
+
+  // count number of lines after header
+  while ( getline(oscar, line) )
+    ++length;
+
+  oscar.close();
+
+  return length;
 }
+
+
+// OSCAR2008H.dat
+// tau x y e p T R_qgp vx vy dsig_t dsig_x dsig_y
 
 void read_decdat(string path, int length, FO_surf* surf_ptr)
 {
   cout<<" -- Read in information on freeze out surface...";
+  double dummy;
+  double zero = 0.0;
+  string line;
   ostringstream decdat_stream;
-  decdat_stream << path << "/decdat2.dat";
+  decdat_stream << path << "/OSCAR2008H.dat";
   ifstream decdat(decdat_stream.str().c_str());
+
+  // skip the header
+  while ( line != "END_OF_HEADER" )
+    getline(decdat, line);
+
+  // read data from remaining lines
   for(int i=0; i<length; i++)
   {
+     // read time from first column
      decdat >> surf_ptr[i].tau;
+
+     // next two columns are x,y -- ignore them in this function
+     decdat >> dummy >> dummy;
+
+     // energy density, pressure, temp
+     decdat >> surf_ptr[i].Edec;
+     decdat >> surf_ptr[i].Pdec;
+     decdat >> surf_ptr[i].Tdec;
+
+     // ignore R_qgp
+     decdat >> dummy;
+
+     // flow velocities
+     decdat >> surf_ptr[i].vx;
+     decdat >> surf_ptr[i].vy;
+
+     // normal vector
      decdat >> surf_ptr[i].da0;
      decdat >> surf_ptr[i].da1;
      decdat >> surf_ptr[i].da2;
-     decdat >> surf_ptr[i].vx;
-     decdat >> surf_ptr[i].vy;
-     decdat >> surf_ptr[i].Edec;
-     decdat >> surf_ptr[i].Bn;
-     decdat >> surf_ptr[i].Tdec;
-     decdat >> surf_ptr[i].muB;
-     decdat >> surf_ptr[i].muS;
-     decdat >> surf_ptr[i].Pdec;
-     decdat >> surf_ptr[i].pi33;
-     decdat >> surf_ptr[i].pi00;
-     decdat >> surf_ptr[i].pi01;
-     decdat >> surf_ptr[i].pi02;
-     decdat >> surf_ptr[i].pi11;
-     decdat >> surf_ptr[i].pi12;
-     decdat >> surf_ptr[i].pi22;
+
+
+     // set baryon density, chemical potentials, shear tensor to zero
+     surf_ptr[i].Bn = zero;
+     surf_ptr[i].muB = zero;
+     surf_ptr[i].muS = zero;
+     surf_ptr[i].pi33 = zero;
+     surf_ptr[i].pi00 = zero;
+     surf_ptr[i].pi01 = zero;
+     surf_ptr[i].pi02 = zero;
+     surf_ptr[i].pi11 = zero;
+     surf_ptr[i].pi12 = zero;
+     surf_ptr[i].pi22 = zero;
   }
   decdat.close();
   cout<<"done"<<endl;
@@ -54,17 +97,29 @@ void read_decdat(string path, int length, FO_surf* surf_ptr)
 
 void read_surfdat(string path, int length, FO_surf* surf_ptr)
 {
-  cout<<" -- Read spaical positions of freeze out surface...";
+  cout<<" -- Read spatial positions of freeze out surface...";
   ostringstream surfdat_stream;
   double dummy;
+  string line;
   char rest_dummy[512];
-  surfdat_stream << path << "/surface.dat";
+  surfdat_stream << path << "/OSCAR2008H.dat";
   ifstream surfdat(surfdat_stream.str().c_str());
+
+  // skip the header
+  while ( line != "END_OF_HEADER" )
+    getline(surfdat, line);
+
+  // read data from remaining lines
   for(int i=0; i<length; i++)
   {
-     surfdat >> dummy >> dummy;
+     // ignore first column [tau]
+     surfdat >> dummy;
+
+     // read positions
      surfdat >> surf_ptr[i].xpt;
      surfdat >> surf_ptr[i].ypt;
+
+     // ignore rest of line
      surfdat.getline(rest_dummy, 512);
   }
   surfdat.close();
