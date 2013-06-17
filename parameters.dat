@@ -17,8 +17,8 @@ dN_dy_sampling_para3 = 0               # Additional parameters for dN/dy samplin
 dN_dy_sampling_para4 = 0               # Additional parameters for dN/dy sampling. 
 dN_dy_sampling_para5 = 0               # Additional parameters for dN/dy sampling. 
 
-y_LB = -3.0                            # lower bound for y-sampling; used in "conventional" sampling
-y_RB = 3.0                             # upper bound for y-sampling; used in "conventional" sampling
+y_LB = -0.5                            # lower bound for y-sampling; used in "conventional" sampling
+y_RB = 0.5                             # upper bound for y-sampling; used in "conventional" sampling
 
 eta_s_LB = -0.5                          # lower bound for eta_s sampling; used only when sampling using total energy flux
 eta_s_RB = 0.5                           # upper bound for eta_s sampling.
