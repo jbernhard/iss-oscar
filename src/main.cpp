@@ -39,7 +39,7 @@ int main(int argc, char** argv)
         << "modified by Jonah Bernhard" << endl << endl;
 
    // Chun's input reading process
-   string path="results";
+   string path="surface";
 
    //load freeze out information
    int FO_length = 0;
