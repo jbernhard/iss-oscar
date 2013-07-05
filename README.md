@@ -13,7 +13,7 @@ iSS-OSCAR is built via the standard CMake process:
   3. `make`
   4. `make install`
 
-This will placed the compiled `iSS` binary in project root.
+This will placed the compiled `iSS` binary in the project root.
 
 
 ## Usage
