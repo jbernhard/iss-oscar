@@ -18,7 +18,9 @@ This will placed the compiled `iSS` binary in the project root.
 
 ## Usage
 
-  * Edit `parameters.dat` as desired.
+  * Edit `parameters.dat` as desired.  Some notable options:
+    * MC\_sampling:  Might want to set this 2 for testing, since it is much faster, but produces less accurate flows.
+    * number\_of\_repeated\_sampling:  How many times to sample the hypersurface.
   * Edit `EOS/chosen_particles.dat` as desired.  This list of Monte Carlo IDs determines the particle types which will be sampled.  Several presets are
      available:
       - `chosen_particles_3.dat`:  pi+, K+, and protons (this is the current setting).
