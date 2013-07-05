@@ -1,7 +1,7 @@
 # iSS-OSCAR
 
-This is a slighty modified version of the iSS hypersurface sampler, written by Zhi Qiu and Chun Shen at Ohio State University.  It reads 2+1D hydro
-freeze-out hypersurfaces in standard OSCAR format and outputs particles in 3+1D.
+This is a slighty modified version of the iSS hypersurface sampler, written by Zhi Qiu and Chun Shen at Ohio State University.  It reads 2+1D hydro freeze-out
+hypersurfaces in standard [OSCAR](https://wiki.bnl.gov/TECHQM/index.php/OSCAR_Standard_Output_Format_for_Hydro_Codes) format and outputs particles in 3+1D.
 
 
 ## Compilation
