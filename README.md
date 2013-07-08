@@ -28,3 +28,13 @@ This will placed the compiled `iSS` binary in the project root.
       - `chosen_particles_all.dat`:  All particles (319).
   * Place an OSCAR hypersurface file in `surface/OSCAR2008H.dat`.
   * Call `./iSS`.  Parameters may be passed on the command line and will override `parameters.dat`.  Results will be placed in `results/`.
+
+
+## Notes
+
+Basic parsing of the OSCAR header is implemented.  Currently, three items are checked:
+
+  * Geometry must be 'scaling2d'.
+  * Grid must be 'Euler'.
+  * Viscosity must be 'none' or 'shear viscosity only'.  If 'none', all components of the shear tensor are set to zero, else the components are expected in the
+    OSCAR file following the normal vector.  The order of the components must be `pi00 pi01 pi02 pi11 pi12 pi22 pi33`.
