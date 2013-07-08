@@ -54,7 +54,13 @@ int main(int argc, char** argv)
    for(int i=0; i<FO_length; i++)
      for(int j=0; j<Maxparticle; j++)
          FOsurf_ptr[i].particle_mu[j] = 0.0e0;
-   read_decdat(path, FO_length, FOsurf_ptr);
+   try {
+     read_decdat(path, FO_length, FOsurf_ptr);
+   } catch (const char* msg) {
+     cerr << msg << endl;
+     return 1;
+   }
+   //return 0;
 
    //read the positions of the freeze out surface
    read_surfdat(path, FO_length, FOsurf_ptr);

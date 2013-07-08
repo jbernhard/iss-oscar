@@ -33,9 +33,18 @@ int get_filelength(string filepath)
   return length;
 }
 
+void strip(string& s) {
+   size_t p = s.find_first_not_of(" ");
+   s.erase(0, p);
+
+   p = s.find_last_not_of(" ");
+   if (string::npos != p)
+      s.erase(p+1);
+}
+
 
 // OSCAR2008H.dat
-// tau x y e p T R_qgp vx vy dsig_t dsig_x dsig_y
+// tau x y e p T R_qgp vx vy dsig_t dsig_x dsig_y [pi00 pi01 pi02 pi11 pi12 pi22 pi33]
 
 void read_decdat(string path, int length, FO_surf* surf_ptr)
 {
@@ -43,13 +52,43 @@ void read_decdat(string path, int length, FO_surf* surf_ptr)
   double dummy;
   double zero = 0.0;
   string line;
+  string key;
+  string value;
+  bool viscous;
   ostringstream decdat_stream;
   decdat_stream << path << "/OSCAR2008H.dat";
   ifstream decdat(decdat_stream.str().c_str());
 
-  // skip the header
-  while ( line != "END_OF_HEADER" )
+  // parse the header
+  while ( line != "END_OF_HEADER" ) {
     getline(decdat, line);
+
+    istringstream linestr(line);
+
+    // split each line into key:value pairs
+    getline(linestr, key, ':');
+    getline(linestr, value);
+    strip(value);
+
+    // check geometry
+    if (key == "GEOM" && value != "scaling2d")
+      throw " ERROR: iSS can only handle scaling2d geometry";
+
+    // check grid
+    if (key == "GRID" && value != "Euler")
+      throw " ERROR: iSS can only handle Eulerian grid";
+
+    // check viscosity
+    if (key == "VISCOSITY") {
+      if (value == "none") {
+        viscous = false;
+      } else if (value == "shear viscosity only") {
+        viscous = true;
+      } else {
+        throw " ERROR: iSS can only handle shear viscosity";
+      }
+    }
+  }
 
   // read data from remaining lines
   for(int i=0; i<length; i++)
@@ -77,18 +116,31 @@ void read_decdat(string path, int length, FO_surf* surf_ptr)
      decdat >> surf_ptr[i].da1;
      decdat >> surf_ptr[i].da2;
 
+     if (viscous) {
+       // read shear tensor components
+       decdat >> surf_ptr[i].pi00;
+       decdat >> surf_ptr[i].pi01;
+       decdat >> surf_ptr[i].pi02;
+       decdat >> surf_ptr[i].pi11;
+       decdat >> surf_ptr[i].pi12;
+       decdat >> surf_ptr[i].pi22;
+       decdat >> surf_ptr[i].pi33;
+     } else {
+       // no viscosity
+       // set all shear tensor components to zero
+       surf_ptr[i].pi00 = zero;
+       surf_ptr[i].pi01 = zero;
+       surf_ptr[i].pi02 = zero;
+       surf_ptr[i].pi11 = zero;
+       surf_ptr[i].pi12 = zero;
+       surf_ptr[i].pi22 = zero;
+       surf_ptr[i].pi33 = zero;
+     }
 
-     // set baryon density, chemical potentials, shear tensor to zero
+     // set baryon density, chemical potentials to zero
      surf_ptr[i].Bn = zero;
      surf_ptr[i].muB = zero;
      surf_ptr[i].muS = zero;
-     surf_ptr[i].pi33 = zero;
-     surf_ptr[i].pi00 = zero;
-     surf_ptr[i].pi01 = zero;
-     surf_ptr[i].pi02 = zero;
-     surf_ptr[i].pi11 = zero;
-     surf_ptr[i].pi12 = zero;
-     surf_ptr[i].pi22 = zero;
   }
   decdat.close();
   cout<<"done"<<endl;
